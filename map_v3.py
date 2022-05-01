@@ -50,7 +50,7 @@ def find_coordinate_cols(csv_infile):
     # df.rename(columns={ df.columns[coord_col[0]]: "Latitude", df.columns[coord_col[1]]: "Longitude" }, inplace = True)
 
     # Push the data to outfile
-    df.to_csv("./data/coordinate-data-found.csv", index=False)
+    df.to_csv("./data/coord-data-found.csv", index=False)
 
 
 def clean_coord_data(csv_infile):
@@ -65,4 +65,4 @@ def clean_coord_data(csv_infile):
 
 infile = input("Enter full/relative path to (CSV) dataset on system: ") # "./data/meteorite-landings.csv"
 find_coordinate_cols(infile)
-clean_coord_data("./data/coordinate-data-found.csv")
+clean_coord_data("./data/coord-data-found.csv")
