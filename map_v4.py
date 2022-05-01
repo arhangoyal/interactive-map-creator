@@ -16,7 +16,7 @@ from myfunctions import find_coordinate_cols, clean_coord_data
 
 # main
 
-infile = input("Enter full/relative path to (CSV) dataset on system: ") # "./input/meteorite-landings.csv"
+infile = input("Enter full/relative path to (CSV) dataset on system: ") # ./input/meteorite-landings.csv
 find_coordinate_cols(infile)
 clean_coord_data("./data/coord-data-found.csv")
 
@@ -26,16 +26,23 @@ clean_coord_data("./data/coord-data-found.csv")
 
 # open coordinate filtered data file
 clean_df = pd.read_csv("./data/coord-filtered-data.csv", delimiter=",")
-clean_df["mass"] = clean_df["mass"].div(1000) # convert gram to kilogram
+clean_df["mass"] = clean_df["mass"].div(1000) # convert gram to kilogram. This is specific to the meteorite dataset
 
-# input: time period for heatmap and minimum mass of meteorite for plot points
-start_year = int(input("Input start year: "))
-end_year = int(input("Input end year: "))
-min_mass = int(input("Minimum mass of meteorite points to plot (in kg): "))
+# input: filter 1 for heatmap and plot points and filter 2 for plot points only
 
-# create view on dataframe (in inputted time span)
-mask1 = (clean_df["year"] >= start_year) & (clean_df["year"] <= end_year) & (clean_df["mass"] >= min_mass)
-mask2 = (clean_df["year"] >= start_year) & (clean_df["year"] <= end_year)
+col1, col2 = "-1", "-1"
+while col1 not in clean_df.columns.values.tolist():
+    col1 = input("Enter name of column 1 (int/float) to filter out data: ")
+col1_min = float(input(f"Input minimum value for {col1}: "))
+col1_max = float(input(f"Input maximum value for {col1}: "))
+while col2 not in clean_df.columns.values.tolist():
+    col2 = input("Enter name of column 2 (int/float) to filter out data for individual plot points only: ")
+col2_min = float(input(f"Input minimum value for {col2}: "))
+col2_max = float(input(f"Input maximum value for {col2}: "))
+
+# create view on dataframe according to inputted filters
+mask1 = (clean_df[col1] >= col1_min) & (clean_df[col1] <= col1_max) & (clean_df[col2] >= col2_min) & (clean_df[col2] <= col2_max)
+mask2 = (clean_df[col1] >= col1_min) & (clean_df[col1] <= col1_max)
 include = clean_df[mask1]
 
 # updated mask for heatmap
