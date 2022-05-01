@@ -12,20 +12,45 @@ import os
 from random import randint
 
 
-def clean_dataset(df):
-    clean_df = df.dropna(axis=0)
-    clean_df.to_csv("./data/clean_data.csv")
+def find_coordinate_cols(csv_infile, csv_outfile):
+
+
+    # Identify latitude and longitude columns (Assume latitude will be before longitude)
+    df = pd.read_csv(csv_infile, delimiter=",")
+    # meteorites = meteorites1.dropna(axis=0, inplace=False)
+    num_row = df.shape[0]
+    num_col = df.shape[1]
+    coord_col = []
+    for col_idx in range(num_col):
+        temp = df.iloc[: , col_idx] #create a view on column at index col_idx
+
+        # check if most entries in column are likely to be int/float
+        int_percent = 0
+        num_tests = randint(100, 200)
+        for test_num in range(num_tests): #test randomly on 100 to 200 entries in column being integers
+            entry = temp[randint(100, num_row-100)] #pick any entry between index 100 index num_row-100 to avoid any padding in data
+            if isinstance(entry, int) or isinstance(entry, float):
+                int_percent += 1 #number of int/float entries
+        int_percent = int_percent * 100 / num_tests # convert to percentage: percent of tests which were int/float
+
+        if int_percent > 90:
+            f_temp = temp[(temp >= -180) & (temp <= 180)]
+            
+            # If more than 80% values are in our coordinates range
+            if f_temp.shape[0] * 100/num_row > 80:
+                if len(coord_col) < 2:
+                    coord_col.append(col_idx)
+
+    # Rename the coordinate columns to "Latitude" and "Longitude"
+    df.rename(columns={ df.columns[coord_col[0]]: "Latitude", df.columns[coord_col[1]]: "Longitude" }, inplace = True)
+
+    # Push the data to outfile
+    df.to_csv(csv_outfile)
+
+
 
 # main
-df = pd.read_csv(input("Enter full path to (CSV) dataset on system: "), delimiter=",")
 
-# Get rid of faulty datapoints (dataset specific)
-filtered_coords = (meteorites["Longitude"] >= -180) & (meteorites["Longitude"] <= 180) & ((meteorites["Longitude"] != 0) | (meteorites["Latitude"] != 0))
-filtered_years = (meteorites["Year"] >= 860) & (meteorites["Year"] <= 2016)
-filtered_mass = ~pd.isna(meteorites["Mass"])
-filtered_type = ((meteorites["Type"] == "Valid"))
-filtered_meteorites = meteorites[filtered_coords & filtered_years & filtered_type & filtered_mass]
-filtered_meteorites.drop(["GeoLocation", "Type"], axis=1, inplace=True)
-filtered_meteorites["Mass"] = filtered_meteorites["Mass"].div(1000) # convert gram to kilogram
-filtered_meteorites.to_csv("./data/cleansed-data.csv")
-filtered_meteorites = filtered_meteorites.sort_values(by="Year", ascending=True)
+infile = input("Enter full/relative path to (CSV) dataset on system: ") # "./data/meteorite-landings.csv"
+outfile = input("Enter full/relative path to output file on system: ") # "./data/coordinate-data-found.csv"
+find_coordinate_cols(infile, outfile)
