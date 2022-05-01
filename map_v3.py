@@ -64,7 +64,7 @@ def clean_coord_data(csv_infile):
 
 # main
 
-infile = input("Enter full/relative path to (CSV) dataset on system: ") # "./data/meteorite-landings.csv"
+infile = input("Enter full/relative path to (CSV) dataset on system: ") # "./input/meteorite-landings.csv"
 find_coordinate_cols(infile)
 clean_coord_data("./data/coord-data-found.csv")
 
