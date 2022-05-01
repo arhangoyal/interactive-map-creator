@@ -32,7 +32,7 @@ def find_coordinate_cols(csv_infile):
                 int_percent += 1 #number of int/float entries
         int_percent = int_percent * 100 / num_tests # convert to percentage: percent of tests which were int/float
 
-        if int_percent > 90:
+        if int_percent > 95:
             # Check for latitude column
             lat_filter = col[(col >= -90) & (col <= 90)]
             # If more than 80% values are in our coordinates range
@@ -59,3 +59,13 @@ def clean_coord_data(csv_infile):
     filtered_df = df[filtered_coords]
     filtered_df.dropna(axis=0, inplace=True)
     filtered_df.to_csv("./data/coord-filtered-data.csv", index=False)
+
+
+def get_map_filter(df, message):
+    col1 = "-1"
+    cols_lower = [col_name.lower() for col_name in df.columns.values.tolist()] #convert all column names to lower case for comparison
+    while col1 not in cols_lower: # keep asking for input till user matches a column name
+        col1 = input(message).lower() #convert input to lowercase to compare with lower case column names
+    col1_min = float(input(f"Input minimum value for {col1}: "))
+    col1_max = float(input(f"Input maximum value for {col1}: "))
+    return (col1, col1_min, col1_max)
