@@ -1,9 +1,11 @@
 # interactive-map-creator
 Interactive Map Creator
 
+
 ## Link to Meteorite Dataset
 
 [NASA Meteorite Landings](https://www.kaggle.com/datasets/nasa/meteorite-landings)
+
 
 ## Abstract
 
@@ -12,6 +14,7 @@ Maps are wonderful. They can take a huge CSV file and present it in a condensed 
 As someone who loves visual and interactive ways of learning and working, I have created a tool to create an interactive heatmap for any inputted dataset with map data (latitude, longitude). To make the interface clean for the user, I designed a solution to identify the latitude and longitude columns in the input dataset and use it to create an interactive heatmap. I then overlay the heatmap with individual datapoints (clickable icons with an information wall) based on a filter which the user creates. The idea is that while we may want to observe the pattern shown by a neat heatmap, we might only want to see information about specific “important” plot points. I feel this is a beautiful way to view the pattern/general trend and important data points together.
 
 Note: The heatmap and icon sizes adjust themselves as users zoom in and out of the map!
+
 
 ## Implementation Details
 
@@ -24,6 +27,7 @@ Although this program can be used with any input dataset (after commenting out t
 3. I have attached my [sample map output](./output/map.html) for data in time (year) span [1960, 2016] and mass (kg) range [100, 100000].
 4. I have also added a [sample output picture](./output/sample_output.png) and a [sample output video](./output/honors_project.mp4) to the [same folder](./output/).
 5. The [data folder](./data/) contains the intermediate CSV files the program creates in its journey from the input dataset to the output map.
+
 
 ## Future Works
 
