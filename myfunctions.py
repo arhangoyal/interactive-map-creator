@@ -18,7 +18,7 @@ def find_coordinate_cols(csv_infile):
     # meteorites = meteorites1.dropna(axis=0, inplace=False)
     num_row, num_col = df.shape[0], df.shape[1]
     lat_idx, lon_idx = -1, -1
-    coord_col = []
+    # coord_col = []
 
     for col_idx in range(num_col):
         col = df.iloc[: , col_idx] #create a view on column at index col_idx
@@ -27,7 +27,7 @@ def find_coordinate_cols(csv_infile):
         int_percent = 0
         num_tests = randint(100, 200)
         for test_num in range(num_tests): #test randomly on 100 to 200 entries in column being integers
-            entry = col[randint(100, num_row-100)] #pick any entry between index 100 index num_row-100 to avoid any padding in data
+            entry = col[randint(100, num_row-100)] #pick any entry between index 100 and index num_row-100 to avoid any padding in data
             if isinstance(entry, int) or isinstance(entry, float):
                 int_percent += 1 #number of int/float entries
         int_percent = int_percent * 100 / num_tests # convert to percentage: percent of tests which were int/float
